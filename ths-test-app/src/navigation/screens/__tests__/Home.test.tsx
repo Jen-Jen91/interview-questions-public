@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { render, screen, userEvent } from '@testing-library/react-native';
 import HomeScreen from '../Home';
 import { LoggedInContext } from '../../../App';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -29,12 +29,13 @@ test('renders logout button when logged in', () => {
   expect(logoutButton).toBeTruthy();
 });
 
-test('calls toggleIsLoggedIn when button is pressed', () => {
+test('calls toggleIsLoggedIn when button is pressed', async () => {
   const toggleIsLoggedIn = jest.fn();
+  const user = userEvent.setup();
   renderWithContext(<HomeScreen />, false, toggleIsLoggedIn);
   
   const loginButton = screen.getByText('Log In');
-  fireEvent.press(loginButton);
+  await user.press(loginButton);
   
   expect(toggleIsLoggedIn).toHaveBeenCalled();
 });
