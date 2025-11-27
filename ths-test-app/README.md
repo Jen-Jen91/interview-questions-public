@@ -19,7 +19,7 @@ We’d like you to add the following functionality:
 - Add configuration to handle a URL such as ‘ths-test-app://listing?listingId=123456’ and open the correct individual listing
 - Opening a listing URL while on the listing screen should add a new listing screen on top of the existing one
 - Gracefully handle a link to a listing that can't be retrieved over the network
-- Ensure your new feature is reliable and maintainable. We use Jest and React Native Testing Library in our codebase.
+- Ensure your new features are reliable and maintainable. We use Jest and React Native Testing Library in our codebase.
 
 We recommend spending no more than a few hours on this exercise. In our next conversation, we’ll discuss your implementation, cover any parts not completed, and talk through possible improvements.
 
