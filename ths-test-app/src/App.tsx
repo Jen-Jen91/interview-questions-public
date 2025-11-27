@@ -11,7 +11,12 @@ import { Navigation } from './navigation';
 
 SplashScreen.preventAutoHideAsync();
 
-const LoggedInContext = createContext(null);
+const LoggedInContext = createContext<LoggedInContextType>({isLoggedIn: false, toggleIsLoggedIn: async () => {}});
+
+export interface LoggedInContextType {
+  isLoggedIn: boolean;
+  toggleIsLoggedIn: () => Promise<void>;
+}
 
 export function App() {
   const [ serverStarted, setServerStarted ] = useState(false);
