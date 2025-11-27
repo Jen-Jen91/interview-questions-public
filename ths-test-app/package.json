@@ -7,7 +7,6 @@
     "android": "npx expo run:android",
     "ios": "npx expo run:ios",
     "ios-device": "npx expo run:ios --device",
-    "reset-project": "node ./src/scripts/reset-project.js",
     "test": "jest"
   },
   "dependencies": {
