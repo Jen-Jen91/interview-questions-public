@@ -5,7 +5,7 @@ import HomeScreen from '../Home';
 import { LoggedInContext } from '../../../App';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const renderWithContext = (component, isLoggedIn = false, toggleIsLoggedIn = jest.fn()) => {
+const renderWithContext = (component: React.ReactNode, isLoggedIn = false, toggleIsLoggedIn = jest.fn()) => {
   return render(
     <SafeAreaProvider>
       <LoggedInContext.Provider value={{ isLoggedIn, toggleIsLoggedIn }}>

@@ -35,7 +35,7 @@ const HomeTabs = createBottomTabNavigator({
     tabBarStyle: Platform.select({
       ios: {
         // Use a transparent background on iOS to show the blur effect
-        possition: 'absolute',
+        position: 'absolute' as const,
       },
       default: {},
     }),
@@ -68,6 +68,7 @@ type RootStackParamList = StaticParamList<typeof RootStack>;
 
 declare global {
   namespace ReactNavigation {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface RootParamList extends RootStackParamList {}
   }
 }

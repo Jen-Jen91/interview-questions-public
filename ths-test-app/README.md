@@ -11,8 +11,6 @@ The test will focus primarily on implementing navigation and external linking re
 
 Unless otherwise stated, you’re welcome to use external libraries and dependencies as needed.
 
-Don’t worry about adding types, the test code doesn’t include them consistently.
-
 ## The Tasks
 
 We’d like you to add the following functionality:

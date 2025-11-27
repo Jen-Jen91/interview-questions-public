@@ -4,14 +4,19 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
-const ListingRow = ({title}) => (
+interface Listing {
+  id: number;
+  title: string;
+}
+
+const ListingRow = ({title}: {title: string}) => (
   <View style={styles.item}>
     <Text style={styles.title}>{title}</Text>
   </View>
 );
 
 export default function ListingsScreen() {
-  const [ listingData, setListingData ] = useState([]);
+  const [ listingData, setListingData ] = useState<Listing[]>([]);
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
