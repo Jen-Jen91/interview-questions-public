@@ -1,34 +1,44 @@
 import { useEffect, useState } from "react";
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { Text, View, Pressable, StyleSheet, FlatList } from "react-native";
 import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import { Listing } from "@/types/listing";
 
-interface Listing {
-  id: number;
-  title: string;
-}
-
-const ListingRow = ({title}: {title: string}) => (
-  <View style={styles.item}>
+const ListingRow = ({title, onPress}: {title: string, onPress: () => void}) => (
+  <Pressable style={styles.item} onPress={onPress}>
     <Text style={styles.title}>{title}</Text>
-  </View>
+  </Pressable>
 );
 
 export default function ListingsScreen() {
   const [ listingData, setListingData ] = useState<Listing[]>([]);
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
 
   useEffect(() => {
       fetch("/api/listings").then(response => response.json()).then(data => setListingData(data));
   }, []);
+
+  const onPressListing = (listing: Listing) => {
+    navigation.navigate(
+      'SingleListing',
+      { listing }
+    );
+  };
   
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <FlatList
         data={listingData}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({item}) => <ListingRow title={item.title} />}
+        renderItem={({item}) => (
+          <ListingRow 
+            title={item.title} 
+            onPress={() => onPressListing(item)}
+          />
+        )}
         style={styles.list}
       />
     </View>

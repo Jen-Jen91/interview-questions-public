@@ -3,9 +3,12 @@ import { createStaticNavigation, StaticParamList } from '@react-navigation/nativ
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform } from 'react-native';
 
+import { Listing } from '@/types/listing';
+
 import HomeScreen from './screens/Home';
 import Listings from './screens/Listings';
 import NotFound from './screens/NotFound';
+import SingleListing from './screens/SingleListing';
 
 import { HapticTab } from '../components/HapticTab';
 import { IconSymbol } from '../components/ui/IconSymbol';
@@ -49,6 +52,12 @@ const RootStack = createNativeStackNavigator({
       options: {
         headerShown: false,
       },
+    },
+    SingleListing: {
+      screen: SingleListing,
+      options: ({ route }) => ({
+        title: (route.params as { listing: Listing })?.listing.title,
+      }),
     },
     NotFound: {
       screen: NotFound,
