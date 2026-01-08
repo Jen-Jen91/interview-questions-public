@@ -1,4 +1,5 @@
-import { StaticScreenProps } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import {
   useSafeAreaInsets,
@@ -8,35 +9,61 @@ import { Listing, ListingAnimal } from "@/types/listing";
 import ImageWithCaption from "@/components/ImageWithCaption";
 
 type Props = StaticScreenProps<{
-  listing: Listing
+  listingId: number
 }>;
 
 const AnimalListItem = ({animal, isLast}: {animal: ListingAnimal, isLast: boolean}) => (
-  <View style={styles.animalContainer}>
+  <>
     <Text style={styles.animalText}>
       {`${animal.count} ${animal.name.toLocaleUpperCase()}`}
     </Text>
     {!isLast && (<Text style={styles.animalText}>{' | '}</Text>)}
-  </View>
+  </>
 );
 
 export default function SingleListingScreen({route}: Props) {
+  const [ singleListingData, setSingleListingData ] = useState<Listing>();
+
   const insets = useSafeAreaInsets();
-  const { listing } = route.params;
+  const navigation = useNavigation();
+  const { listingId } = route.params;
+
+  // Fetch data for a single listing using id in route params.
+  // Whole listing object could be passed as params within app, but wouldn't work for deep links.
+  useEffect(() => {
+      fetch("/api/listings")
+        .then(response => response.json())
+        .then(data => data.find((item: Listing) => item.id === listingId))
+        .then(item => setSingleListingData(item));
+  }, [listingId]);
+
+  // Update screen title with listing title (if available).
+  // Can cause flickering on initial render - might prefer a common title.
+  useEffect(() => {
+    if (!singleListingData?.title) return;
+    navigation.setOptions({ title: singleListingData?.title });
+  }, [navigation, singleListingData]);
+
+  // TODO: Gracefully handle missing data
+  if (!singleListingData) {
+    return null;
+  }
+
+  // TODO: Handle potentially missing location text
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <ImageWithCaption caption={listing.user.firstName} />
-      <Text style={styles.title}>{listing.title}</Text>
-      <Text style={styles.locationText}>{listing.location.name}, {listing.location.countryName}</Text>
+      <ImageWithCaption caption={singleListingData.user.firstName} />
+      <Text style={styles.title}>{singleListingData.title || 'THS Listing'}</Text>
+      <Text style={styles.locationText}>{singleListingData.location.name}, {singleListingData.location.countryName}</Text>
       <FlatList
-        data={listing.animals}
+        data={singleListingData.animals}
         keyExtractor={(item) => item.name}
         renderItem={({item, index}) => (
-          <AnimalListItem animal={item} isLast={index === listing.animals.length - 1}/>
+          <AnimalListItem animal={item} isLast={index === singleListingData.animals.length - 1}/>
         )}
         style={styles.animalList}
-        contentContainerStyle={styles.animalListContent}
+        numColumns={5}
       />
     </View>
   );
@@ -60,13 +87,6 @@ const styles = StyleSheet.create({
   animalList: {
     width: '100%',
     marginTop: 16,
-  },
-  animalListContent: {
-    flexDirection: 'row',
-    flexWrap: 'wrap'
-  },
-  animalContainer: {
-    flexDirection: 'row',
   },
   animalText: {
     fontSize: 12,

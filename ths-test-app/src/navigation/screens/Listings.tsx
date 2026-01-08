@@ -24,7 +24,7 @@ export default function ListingsScreen() {
   const onPressListing = (listing: Listing) => {
     navigation.navigate(
       'SingleListing',
-      { listing }
+      { listingId: listing.id }
     );
   };
   

@@ -1,8 +1,10 @@
+import * as Linking from 'expo-linking';
 import 'react-native-gesture-handler';
 import { useEffect, useState, createContext } from "react";
 import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  getStateFromPath,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { useLogger } from '@react-navigation/devtools';
@@ -79,7 +81,32 @@ export function App() {
 
   return (
     <LoggedInContext.Provider value={{ isLoggedIn, toggleIsLoggedIn }}>
-      <Navigation ref={navigationRef} />
+      <Navigation 
+        ref={navigationRef} 
+        linking={{ 
+          enabled: 'auto',
+          prefixes: [Linking.createURL('/')],
+          getStateFromPath(path, options) {
+            // Override default empty navigation state when parsing path from deep links & web urls.
+            // For the Single Listing screen, ensure users can go back to the Listings screen.
+            // For all other screens, ensure users can go back to the Home screen.
+            const defaultNavState = getStateFromPath(path, options);
+            const defaultRoutes = defaultNavState?.routes || [];
+            const isListingPath = path?.includes('listing');
+            const newNavState = {
+                ...defaultNavState,
+                routes: [
+                  { 
+                    name: 'HomeTabs',
+                    state: isListingPath ? { routes: [{ name: 'Listings' }]} : undefined,
+                  },
+                  ...defaultRoutes
+                ]
+            };
+            return newNavState;
+          },
+        }} 
+      />
     </LoggedInContext.Provider>
   );
 }

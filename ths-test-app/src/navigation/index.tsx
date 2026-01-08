@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform } from 'react-native';
 import { useContext } from 'react';
 
-import { Listing } from '@/types/listing';
 import { LoggedInContext } from "@/App";
 
 import HomeScreen from './screens/Home';
@@ -29,6 +28,9 @@ const HomeTabs = createBottomTabNavigator({
         headerShown: false,
         tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
       },
+      linking: {
+        path: 'home'
+      },
     },
     Listings: {
       if: useIsLoggedIn,
@@ -36,6 +38,9 @@ const HomeTabs = createBottomTabNavigator({
       options: {
         headerShown: false,
         tabBarIcon: ({ color }) => <IconSymbol size={28} name="pawprint" color={color} />,
+      },
+      linking: {
+        path: 'listings'
       },
     },
   },
@@ -64,9 +69,12 @@ const RootStack = createNativeStackNavigator({
     SingleListing: {
       if: useIsLoggedIn,
       screen: SingleListing,
-      options: ({ route }) => ({
-        title: (route.params as { listing: Listing })?.listing.title,
-      }),
+      options: {
+        title: 'THS Listing',  
+      },
+      linking: {
+        path: 'listing'
+      },
     },
     NotFound: {
       screen: NotFound,
