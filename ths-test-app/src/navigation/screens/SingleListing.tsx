@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import {
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Listing, ListingAnimal } from "@/types/listing";
 import ImageWithCaption from "@/components/ImageWithCaption";
+import MissingData from "@/components/MissingData";
 
 type Props = StaticScreenProps<{
   listingId: number
@@ -44,18 +43,22 @@ export default function SingleListingScreen({route}: Props) {
     navigation.setOptions({ title: singleListingData?.title });
   }, [navigation, singleListingData]);
 
-  // TODO: Gracefully handle missing data
   if (!singleListingData) {
-    return null;
+    return <MissingData title="Listing not found" subtitle="Sorry, we could not find that listing. Please refresh the page or go back to the Listings page." />;
   }
 
-  // TODO: Handle potentially missing location text
+  const getLocationText = () => {
+    const locationData = singleListingData.location;
+    const locationParts = [locationData.name, locationData.countryName];
+    const locationText = locationParts.filter(Boolean).join(', ');
+    return locationText || 'Unknown Location';
+  };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <ImageWithCaption caption={singleListingData.user.firstName} />
       <Text style={styles.title}>{singleListingData.title || 'THS Listing'}</Text>
-      <Text style={styles.locationText}>{singleListingData.location.name}, {singleListingData.location.countryName}</Text>
+      <Text style={styles.locationText}>{getLocationText()}</Text>
       <FlatList
         data={singleListingData.animals}
         keyExtractor={(item) => item.name}

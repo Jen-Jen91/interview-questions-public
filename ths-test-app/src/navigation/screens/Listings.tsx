@@ -5,6 +5,8 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { Listing } from "@/types/listing";
+import MissingData from "@/components/MissingData";
+import Loading from "@/components/Loading";
 
 const ListingRow = ({title, onPress}: {title: string, onPress: () => void}) => (
   <Pressable style={styles.item} onPress={onPress}>
@@ -13,13 +15,26 @@ const ListingRow = ({title, onPress}: {title: string, onPress: () => void}) => (
 );
 
 export default function ListingsScreen() {
+  const [loading, setLoading] = useState(true);
   const [ listingData, setListingData ] = useState<Listing[]>([]);
+
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
   useEffect(() => {
-      fetch("/api/listings").then(response => response.json()).then(data => setListingData(data));
+      fetch("/api/listings")
+        .then(response => response.json())
+        .then(data => setListingData(data))
+        .finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  };
+
+  if (!loading && !listingData?.length) {
+    return <MissingData title="No listings found" subtitle="Sorry, we could not find any listings. Please refesh the page or go back to the Home page." />
+  };
 
   const onPressListing = (listing: Listing) => {
     navigation.navigate(

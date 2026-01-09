@@ -2,9 +2,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStaticNavigation, StaticParamList } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform } from 'react-native';
-import { useContext } from 'react';
+import { Suspense, useContext } from 'react';
 
 import { LoggedInContext } from "@/App";
+import Loading from '@/components/Loading';
 
 import HomeScreen from './screens/Home';
 import Listings from './screens/Listings';
@@ -59,6 +60,11 @@ const HomeTabs = createBottomTabNavigator({
 });
 
 const RootStack = createNativeStackNavigator({
+  screenLayout: ({ children }) => (
+    <Suspense fallback={<Loading />}>
+      {children}
+    </Suspense>
+  ),
   screens: {
     HomeTabs: {
       screen: HomeTabs,
@@ -79,7 +85,7 @@ const RootStack = createNativeStackNavigator({
     NotFound: {
       screen: NotFound,
       options: {
-        title: '404',
+        title: 'Page not found',
       },
       linking: {
         path: '*',

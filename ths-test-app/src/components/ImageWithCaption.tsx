@@ -7,10 +7,15 @@ interface ImageWithCaptionProps {
   caption?: string;
 }
 
-const ImageWithCaption = ({imageSource, caption}:ImageWithCaptionProps) => {
+const ImageWithCaption = ({imageSource, caption}: ImageWithCaptionProps) => {
   return (
     <View style={styles.imageContainer}>
-      <Image source={imageSource || PlaceholderImage} style={styles.image} />
+      <Image 
+        source={imageSource || PlaceholderImage}
+        accessibilityLabel="Listing profile photo"
+        style={styles.image}
+        resizeMode='cover'
+      />
       {!!caption && (
         <View style={styles.captionContainer}>
           <Text style={styles.captionText}>{caption}</Text>
@@ -23,7 +28,6 @@ const ImageWithCaption = ({imageSource, caption}:ImageWithCaptionProps) => {
 const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    maxHeight: '30%',
     marginBottom: 16,
   },
   image: {
