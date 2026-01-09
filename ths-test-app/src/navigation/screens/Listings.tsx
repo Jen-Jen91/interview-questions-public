@@ -8,8 +8,8 @@ import { Listing } from "@/types/listing";
 import MissingData from "@/components/MissingData";
 import Loading from "@/components/Loading";
 
-const ListingRow = ({title, onPress}: {title: string, onPress: () => void}) => (
-  <Pressable style={styles.item} onPress={onPress}>
+const ListingRow = ({title, id, onPress}: {title: string, id: number, onPress: () => void}) => (
+  <Pressable style={styles.item} onPress={onPress} testID={`listings-row-${id.toString()}`}>
     <Text style={styles.title}>{title}</Text>
   </Pressable>
 );
@@ -44,17 +44,19 @@ export default function ListingsScreen() {
   };
   
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View testID="listings-container" style={[styles.container, { paddingTop: insets.top }]}>
       <FlatList
         data={listingData}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => (
           <ListingRow 
+            id={item.id}
             title={item.title} 
             onPress={() => onPressListing(item)}
           />
         )}
         style={styles.list}
+        testID="listings-list"
       />
     </View>
   );

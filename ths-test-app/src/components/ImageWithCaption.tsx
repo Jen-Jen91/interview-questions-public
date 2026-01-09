@@ -5,14 +5,16 @@ import PlaceholderImage from '@/assets/images/adaptive-icon.png';
 interface ImageWithCaptionProps {
   imageSource?: ImageSourcePropType;
   caption?: string;
+  altLabel?: string;
+  testId?: string;
 }
 
-const ImageWithCaption = ({imageSource, caption}: ImageWithCaptionProps) => {
+const ImageWithCaption = ({imageSource, caption, altLabel, testId}: ImageWithCaptionProps) => {
   return (
-    <View style={styles.imageContainer}>
+    <View style={styles.imageContainer} testID={testId}>
       <Image 
         source={imageSource || PlaceholderImage}
-        accessibilityLabel="Listing profile photo"
+        accessibilityLabel={altLabel}
         style={styles.image}
         resizeMode='cover'
       />

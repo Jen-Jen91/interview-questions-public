@@ -32,7 +32,7 @@ export default function SingleListingScreen({route}: Props) {
   useEffect(() => {
       fetch("/api/listings")
         .then(response => response.json())
-        .then(data => data.find((item: Listing) => item.id === listingId))
+        .then(data => data?.find((item: Listing) => item.id === listingId))
         .then(item => setSingleListingData(item));
   }, [listingId]);
 
@@ -55,8 +55,12 @@ export default function SingleListingScreen({route}: Props) {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      <ImageWithCaption caption={singleListingData.user.firstName} />
+    <View style={[styles.container, { paddingTop: insets.top }]} testID="single-listing-container">
+      <ImageWithCaption 
+        caption={singleListingData.user.firstName}
+        altLabel="Listing profile photo"
+        testId="single-listing-image"
+      />
       <Text style={styles.title}>{singleListingData.title || 'THS Listing'}</Text>
       <Text style={styles.locationText}>{getLocationText()}</Text>
       <FlatList
@@ -67,6 +71,7 @@ export default function SingleListingScreen({route}: Props) {
         )}
         style={styles.animalList}
         numColumns={5}
+        testID="single-listing-animal-list"
       />
     </View>
   );

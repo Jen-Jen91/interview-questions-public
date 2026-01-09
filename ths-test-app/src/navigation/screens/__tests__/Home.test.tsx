@@ -1,19 +1,7 @@
-
 import React from 'react';
-import { render, screen, userEvent } from '@testing-library/react-native';
+import { screen, userEvent } from '@testing-library/react-native';
+import { renderWithContext } from '@/mocks/context';
 import HomeScreen from '../Home';
-import { LoggedInContext } from '../../../App';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-const renderWithContext = (component: React.ReactNode, isLoggedIn = false, toggleIsLoggedIn = jest.fn()) => {
-  return render(
-    <SafeAreaProvider>
-      <LoggedInContext.Provider value={{ isLoggedIn, toggleIsLoggedIn }}>
-        {component}
-      </LoggedInContext.Provider>
-    </SafeAreaProvider>
-  );
-};
 
 test('renders login button when not logged in', () => {
   renderWithContext(<HomeScreen />, false);
