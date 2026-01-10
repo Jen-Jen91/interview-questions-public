@@ -27,17 +27,14 @@ export default function SingleListingScreen({route}: Props) {
   const navigation = useNavigation();
   const { listingId } = route.params;
 
-  // Fetch data for a single listing using id in route params.
-  // Whole listing object could be passed as params within app, but wouldn't work for deep links.
   useEffect(() => {
       fetch("/api/listings")
         .then(response => response.json())
         .then(data => data?.find((item: Listing) => item.id === listingId))
-        .then(item => setSingleListingData(item));
+        .then(item => setSingleListingData(item))
+        .catch((error) => console.error("Error fetching listing data: ", error));
   }, [listingId]);
 
-  // Update screen title with listing title (if available).
-  // Can cause flickering on initial render - might prefer a common title.
   useEffect(() => {
     if (!singleListingData?.title) return;
     navigation.setOptions({ title: singleListingData?.title });
@@ -51,7 +48,7 @@ export default function SingleListingScreen({route}: Props) {
     const locationData = singleListingData.location;
     const locationParts = [locationData.name, locationData.countryName];
     const locationText = locationParts.filter(Boolean).join(', ');
-    return locationText || 'Unknown Location';
+    return locationText || "Unknown Location";
   };
 
   return (
@@ -61,7 +58,7 @@ export default function SingleListingScreen({route}: Props) {
         altLabel="Listing profile photo"
         testId="single-listing-image"
       />
-      <Text style={styles.title}>{singleListingData.title || 'THS Listing'}</Text>
+      <Text style={styles.title}>{singleListingData.title || "THS Listing"}</Text>
       <Text style={styles.locationText}>{getLocationText()}</Text>
       <FlatList
         data={singleListingData.animals}

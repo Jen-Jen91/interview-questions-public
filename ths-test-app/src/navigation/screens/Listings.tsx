@@ -25,6 +25,7 @@ export default function ListingsScreen() {
       fetch("/api/listings")
         .then(response => response.json())
         .then(data => setListingData(data))
+        .catch((error) => console.error("Error fetching listing data: ", error))
         .finally(() => setLoading(false));
   }, []);
 

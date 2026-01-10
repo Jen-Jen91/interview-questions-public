@@ -9,16 +9,6 @@ import SingleListingScreen from '../SingleListing';
 
 jest.useFakeTimers();
 
-const mockNavigate = jest.fn();
-jest.mock('@react-navigation/native', () => {
-  return {
-    ...jest.requireActual('@react-navigation/native'),
-    useNavigation: jest.fn(() => ({
-      navigate: mockNavigate,
-    }))
-  };
-});
-
 global.fetch = jest.fn().mockResolvedValue(
   {
     ok: true,

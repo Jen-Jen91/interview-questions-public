@@ -6,18 +6,9 @@ import { renderWithContext } from '@/mocks/context';
 import { mockListingsData } from '@/mocks/fixtures';
 
 import ListingsScreen from '../Listings';
+import { mockNavigate } from '../../../../jest.setup';
 
 jest.useFakeTimers();
-
-const mockNavigate = jest.fn();
-jest.mock('@react-navigation/native', () => {
-  return {
-    ...jest.requireActual('@react-navigation/native'),
-    useNavigation: jest.fn(() => ({
-      navigate: mockNavigate,
-    }))
-  };
-});
 
 global.fetch = jest.fn().mockResolvedValue(
   {
